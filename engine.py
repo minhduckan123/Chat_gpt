@@ -1,12 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
-from main_ai import hoi_thoai
-import re
+
 
 
 proxy = {'https': 'http://user22630:DDDky@ipv6sv10.proxyapp.vn:22630/'}
-cookies = 'presence=C%7B%22t3%22%3A%5B%5D%2C%22utc3%22%3A1681611582316%2C%22v%22%3A1%7D;fr=0zZoPJbSlLtRN1Y3M.AWW_4hNqbq2PWLAtMo5dJF7OCPs.BkOyMl.Zx.AAA.0.0.BkO1s7.AWUdNB0HS7E;xs=42%3ASTBurjPNROeJ5A%3A2%3A1681611457%3A-1%3A16021;datr=e1k7ZOv6CRBR1_aQgIgigvvY;locale=en_GB;c_user=100082496852554;wd=929x887;sb=7qIqY270Jc2jg9i7A5dkid5x'
+cookies = 'presence=C%7B%22t3%22%3A%5B%5D%2C%22utc3%22%3A1681741045247%2C%22v%22%3A1%7D;fr=0zKcILjib3BigrtQQ.AWVhGa_58slkmiyH8kpZXCv2QSE.BkPVTz.Zx.AAA.0.0.BkPVTz.AWU3Seaj2_g;xs=42%3ASTBurjPNROeJ5A%3A2%3A1681611457%3A-1%3A16021%3A%3AAcXMTTyF0xa3EkxyMZ0LEhkIFFamR7AEODSac-b3jA;datr=e1k7ZOv6CRBR1_aQgIgigvvY;wd=929x887;c_user=100082496852554;locale=en_GB;sb=7qIqY270Jc2jg9i7A5dkid5x'
+id_fb = 100018590648536
 
 headers = {
         'cookie': cookies,
@@ -24,7 +24,7 @@ headers = {
 s = requests.Session()
 s.proxies.update(proxy)
 def engine_nhan_tin(content):
-    r = s.get(f'https://mbasic.facebook.com/messages/read/?tid=cid.c.100018590648536%3A100082496852554', headers=headers)
+    r = s.get(f'https://mbasic.facebook.com/messages/read/?tid=cid.c.{id_fb}%3A100082496852554', headers=headers)
     with open('html.html', 'w', encoding='utf-8') as f:
         f.write(r.text)
     page = r.content
@@ -40,27 +40,11 @@ def engine_nhan_tin(content):
         'send': "Send",
         'tids': tids,
         'wwwupp': 'C3',
-        'ids[100018590648536]': '100018590648536',
+        f'ids[{id_fb}]': id_fb,
         'cver': 'legacy',
         'csid': csid,
     }
 
     send_message = s.post("https://mbasic.facebook.com/messages/send/", headers= headers, data= payload)
-    print(content, "\nTrạng thái:", send_message.status_code)
+    # print(content, "\nTrạng thái:", send_message.status_code)
 
-def chat_bot():
-    while True:
-        link = s.get(f'https://mbasic.facebook.com/messages/read/?tid=cid.c.100018590648536%3A100082496852554', headers=headers)
-
-        page = link.content
-        soup = BeautifulSoup(page, 'html.parser')
-
-        last_guy = soup.find("div", {"id":"messageGroup"}).select("div > div > div > a > strong")[-1].get_text()
-        last_message = soup.find("div", {"id":"messageGroup"}).find_all("div", recursive=False)[-1].find_all("div", recursive=False)[-1].find("span").get_text()
-        if last_guy == "Trịnh Minh Đức":
-            # print(last_message)
-            engine_nhan_tin(hoi_thoai(last_message))
-        else:
-            sleep(10)
-
-chat_bot()
