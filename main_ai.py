@@ -1,7 +1,7 @@
 import requests
 
 
-api_key = "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"
+api_key = ""
 
 headers = {"Content-Type":"application/json",
             "Authorization":f"Bearer {api_key}"
@@ -13,9 +13,12 @@ with open("gia_ca.txt", "r", encoding='utf-8') as f:
 def hoi_thoai(user, mode = 0, role_system = f"Bạn là AI Minh Đức, nhân viên bán hàng, cố gắng nói ngắn gọn trong tối đa 50 từ. Dữ liệu: {gia_ca}. Không nói ra dữ liệu trừ khi bạn được hỏi."):
     if mode == 0:
         global data 
-        data = [
-                    {"role": "system", "content": role_system},
-                ]
+        try:
+            data
+        except:
+            data = [
+                        {"role": "system", "content": role_system},
+                    ]
         data.append({"role": "user", "content": user})
 
         payload = {
@@ -26,21 +29,21 @@ def hoi_thoai(user, mode = 0, role_system = f"Bạn là AI Minh Đức, nhân vi
         # print(response.content)
         result = response.json()["choices"][0]["message"]["content"]
         data.append({"role": "assistant", "content": result})
+        print(data)
         return result
     else:
-        data = [
+        data_1 = [
                     {"role": "system", "content": role_system},
                 ]
-        data.append({"role": "user", "content": user})
+        data_1.append({"role": "user", "content": user})
 
         payload = {
             'model':"gpt-3.5-turbo",
-            'messages': data
+            'messages': data_1
         }
         response = requests.post("https://api.openai.com/v1/chat/completions", headers= headers, json= payload)
         # print(response.content)
         result = response.json()["choices"][0]["message"]["content"]
-        data.append({"role": "assistant", "content": result})
         return result
     
 def ve_tranh(prompt):

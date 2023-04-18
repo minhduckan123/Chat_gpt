@@ -60,6 +60,7 @@ headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
     }
 
+
 s = requests.Session()
 s.proxies.update(proxy)
 
@@ -82,7 +83,7 @@ def chat_bot(mode= 0):
             else:
                 if "dừng" in last_message.lower():
                     mode = 0
-                    engine_nhan_tin(hoi_thoai("Bạn không những là một nhân viên tốt mà còn là một họa sĩ đại tài."))
+                    engine_nhan_tin(hoi_thoai("Cảm ơn bạn."))
                 else:
                     ve_tranh(last_message)
                     engine_gui_anh(driver)
